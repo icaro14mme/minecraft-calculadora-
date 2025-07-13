@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Dano & Eficiência – Minecraft</title>
+  <title>Calculadora de Dano & Encantamentos – Minecraft</title>
   <style>
     body { font-family: Arial, sans-serif; background: #1e1e1e; color: white; padding: 20px; }
     h1 { text-align: center; color: #00ff99; }
@@ -63,79 +63,114 @@
   </div>
 
   <script>
+    const encantamentosArma = [
+      "Afiação I", "Afiação II", "Afiação III", "Afiação IV", "Afiação V",
+      "Ruína dos Artropodes I", "Ruína dos Artropodes II", "Ruína dos Artropodes III", "Ruína dos Artropodes IV", "Ruína dos Artropodes V",
+      "Aniquilação de Mortos-Vivos I", "Aniquilação de Mortos-Vivos II", "Aniquilação de Mortos-Vivos III", "Aniquilação de Mortos-Vivos IV", "Aniquilação de Mortos-Vivos V"
+    ];
+
+    const encantamentosFerramenta = [
+      "Eficiência I", "Eficiência II", "Eficiência III", "Eficiência IV", "Eficiência V",
+      "Fortuna I", "Fortuna II", "Fortuna III",
+      "Toque Suave I",
+      "Inquebrável I", "Inquebrável II", "Inquebrável III",
+      "Remendo I", "Maldição do Desaparecimento I", "Maldição do Elo I"
+    ];
+
+    const encantamentosArmadura = [
+      "Proteção I", "Proteção II", "Proteção III", "Proteção IV",
+      "Proteção Contra Fogo I", "Proteção Contra Fogo II", "Proteção Contra Fogo III", "Proteção Contra Fogo IV",
+      "Proteção Contra Explosões I", "Proteção Contra Explosões II", "Proteção Contra Explosões III", "Proteção Contra Explosões IV",
+      "Proteção Contra Projéteis I", "Proteção Contra Projéteis II", "Proteção Contra Projéteis III", "Proteção Contra Projéteis IV",
+      "Inquebrável I", "Inquebrável II", "Inquebrável III",
+      "Espinhos I", "Espinhos II", "Espinhos III",
+      "Queda Suave I", "Queda Suave II", "Queda Suave III", "Queda Suave IV",
+      "Respiração I", "Respiração II", "Respiração III",
+      "Passos Profundos I", "Passos Profundos II", "Passos Profundos III",
+      "Passos Gelados I", "Passos Gelados II",
+      "Velocidade das Almas I", "Velocidade das Almas II", "Velocidade das Almas III",
+      "Sintonia Aquática I",
+      "Remendo I", "Maldição do Elo I", "Maldição do Desaparecimento I"
+    ];
+
     const opcoes = {
-      espada: { itens:["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos:["Afiação I","II","III","IV","V","Ruína dos Artropodes I-V","Aniquilação de Mortos‑Vivos I-V"] },
-      machado: { itens:["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos:opcoes.espada.encantamentos },
-      picareta: { itens:["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos:["Eficiência I-V","Fortuna I-III","Toque Suave I","Inquebrável I-III","Remendo I","Maldição do Elo I","Maldição do Desaparecimento I"] },
-      pá: { itens:["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos:opcoes.picareta.encantamentos },
-      armadura: { itens:["Couro","Ferro","Ouro","Diamante","Netherite"], encantamentos:["Proteção I-IV","Proteção Fogo I-IV","Explosões I-IV","Projéteis I-IV","Inquebrável I-III","Espinhos I-III","Queda Suave I-IV","Respiração I-III","Passos Profundos I-III","Passos Gelados I-II","Velocidade das Almas I-III","Sintonia Aquática I","Remendo I","Maldição do Elo I","Maldição do Desaparecimento I"] }
+      espada: { itens: ["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos: encantamentosArma },
+      machado: { itens: ["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos: encantamentosArma },
+      picareta: { itens: ["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos: encantamentosFerramenta },
+      pá: { itens: ["Madeira","Pedra","Ferro","Ouro","Diamante","Netherite"], encantamentos: encantamentosFerramenta },
+      armadura: { itens: ["Couro","Ferro","Ouro","Diamante","Netherite"], encantamentos: encantamentosArmadura }
     };
 
     const descricoes = {
       Eficiência: "Aumenta a velocidade de mineração.",
       Fortuna: "Aumenta chance de drops extras.",
-      Toque: "Minerar blocos inteiros (Ex: vidro).",
-      Afiação: "Aumenta dano na arma.",
-      Ruína: "Só contra artropodes.",
-      Aniquilação: "Só contra mortos-vivos.",
-      Proteção: "Reduz todo tipo de dano.",
-      Espinhos: "Retribui dano ao atacante.",
-      Remendo: "Repara item com XP.",
-      Inquebrável:"Diminui desgaste.",
-      Maldição: "Tem efeito negativo."
+      Toque: "Permite coletar blocos inteiros.",
+      Afiação: "Aumenta o dano contra todos os mobs.",
+      Ruína: "Aumenta muito o dano contra artropodes.",
+      Aniquilação: "Aumenta muito o dano contra mortos-vivos.",
+      Proteção: "Reduz todos os tipos de dano.",
+      Espinhos: "Causa dano ao inimigo quando atacado.",
+      Remendo: "Repara o item usando XP.",
+      Inquebrável: "Aumenta a durabilidade do item.",
+      Maldição: "Encantamento com efeito negativo."
     };
 
     function selecionarVersao() {
-      document.getElementById("selecaoPrincipal").style.display = document.getElementById("versao").value ? "block":"none";
+      document.getElementById("selecaoPrincipal").style.display = document.getElementById("versao").value ? "block" : "none";
       atualizarOpcoes();
     }
 
-    function atualizarOpcoes(){
-      const tipo=document.getElementById("tipo").value;
-      const itemSelect=document.getElementById("item");
-      const encSelect=document.getElementById("encantamento");
-      const armExt=document.getElementById("armaduraExtra");
-      const parte=document.getElementById("parteIndividual");
+    function atualizarOpcoes() {
+      const tipo = document.getElementById("tipo").value;
+      const itemSelect = document.getElementById("item");
+      const encSelect = document.getElementById("encantamento");
+      const armExt = document.getElementById("armaduraExtra");
+      const parte = document.getElementById("parteIndividual");
 
-      itemSelect.innerHTML=""; encSelect.innerHTML="";
-      armExt.style.display= tipo=="armadura"?"block":"none";
-      parte.style.display=document.getElementById("armaduraCompleta").checked?"none":"block";
+      itemSelect.innerHTML = "";
+      encSelect.innerHTML = "";
+      armExt.style.display = tipo === "armadura" ? "block" : "none";
+      parte.style.display = document.getElementById("armaduraCompleta").checked ? "none" : "block";
 
-      opcoes[tipo].itens.forEach(it=>{
-        itemSelect.innerHTML+=`<option>${it}</option>`;
-      });
-      opcoes[tipo].encantamentos.forEach(enc=>{
-        encSelect.innerHTML+=`<option>${enc}</option>`;
-      });
+      if (opcoes[tipo]) {
+        opcoes[tipo].itens.forEach(it => {
+          itemSelect.innerHTML += `<option>${it}</option>`;
+        });
+        opcoes[tipo].encantamentos.forEach(enc => {
+          encSelect.innerHTML += `<option>${enc}</option>`;
+        });
+      }
       mostrarDescricaoEncantamento();
     }
 
-    function mostrarDescricaoEncantamento(){
-      const s=document.getElementById("encantamento").value.split(" ")[0];
-      document.getElementById("descricaoEncantamento").innerText = descricoes[s]||"";
+    function mostrarDescricaoEncantamento() {
+      const s = document.getElementById("encantamento").value.split(" ")[0];
+      document.getElementById("descricaoEncantamento").innerText = descricoes[s] || "";
     }
 
-    function calcular(){
-      const tipo=document.getElementById("tipo").value;
-      const item=document.getElementById("item").value;
-      const enc=document.getElementById("encantamento").value;
-      const crit=document.getElementById("critico").checked;
-      const armComp=document.getElementById("armaduraCompleta").checked;
-      const parte=document.getElementById("parte")?.value||"";
+    function calcular() {
+      const tipo = document.getElementById("tipo").value;
+      const enc = document.getElementById("encantamento").value;
+      const lvl = parseInt(enc.match(/\d+/)?.[0]) || 1;
+      let msg = "";
 
-      let msg="";
-      if(tipo=="picareta"||tipo=="pá"){
-        const lvl=+enc.split(" ")[1];
-        msg=`🛠️ ${enc.split(" ")[0]} melhora muito. Eficiência ${lvl} ≈ x${(1+lvl*0.3).toFixed(2)} velocidade.`;
-      } else if(tipo=="espada"||tipo=="machado"){
-        // cálculo de dano
-        msg="🔪 Dano calculado...";
+      if (tipo === "picareta" || tipo === "pá") {
+        if (enc.includes("Eficiência")) {
+          msg = `🛠️ Eficiência ${lvl} aumenta a mineração em aproximadamente x${(1 + lvl * 0.3).toFixed(2)}.`;
+        } else if (enc.includes("Fortuna")) {
+          msg = `💎 Fortuna ${lvl} aumenta a chance de drop extra em minérios.`;
+        } else if (enc.includes("Toque")) {
+          msg = `🎯 Toque Suave coleta blocos no estado original.`;
+        } else {
+          msg = `🔧 Encantamento aplicado com efeito específico.`;
+        }
+      } else if (tipo === "espada" || tipo === "machado") {
+        msg = `⚔️ Encantamento '${enc}' aplicado. Dano modificado (detalhamento em breve).`;
       } else {
-        msg="🛡️ Redução calculada...";
+        msg = `🛡️ Encantamento '${enc}' aplicado à armadura. Redução e efeitos variam.`;
       }
-      document.getElementById("resultado").innerText=msg;
+      document.getElementById("resultado").innerText = msg;
     }
   </script>
 </body>
 </html>
-
